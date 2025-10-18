@@ -64,29 +64,11 @@ export class StreamingService {
     try {
       console.log(`[StreamingService] Processing music for repo ${repoId}`);
 
-      // 1. Render composition offline
-      const webAudioBuffer = await this.offlineRenderer.render(musicalParams);
-
-      // 2. Wrap in ToneAudioBuffer for audio-core compatibility
-      const toneBuffer = new Tone.ToneAudioBuffer(webAudioBuffer);
-      const audioBuffer = {
-        buffer: toneBuffer,
-        duration: toneBuffer.duration,
-        sampleRate: toneBuffer.sampleRate,
-        timestamp: Date.now(),
-      };
-
-      // 3. Broadcast to all clients watching this repo via MultiClientAudioManager
-      await this.multiClientManager.broadcastBuffer(repoId, audioBuffer);
-
-      // 4. Serialize buffer for network transmission
-      const serializedBuffer = BufferSerializer.serialize(webAudioBuffer);
-
-      // 4. Send via SSE to all connected clients
-      const message: Omit<AudioBufferMessage, 'timestamp'> = {
-        type: 'audio_buffer',
+      // MVP: Skip offline rendering - send musical parameters directly to client
+      // Client will render audio using browser's Tone.js (which has Web Audio API)
+      const message = {
+        type: 'musical_parameters' as const,
         data: {
-          buffer: serializedBuffer,
           params: musicalParams,
           repoId,
         },
@@ -94,7 +76,7 @@ export class StreamingService {
 
       this.sseManager.broadcast(repoId, message);
 
-      console.log(`[StreamingService] Successfully streamed audio for repo ${repoId}`);
+      console.log(`[StreamingService] Successfully sent musical parameters for repo ${repoId}`);
     } catch (error) {
       console.error(`[StreamingService] Error processing music for repo ${repoId}:`, error);
 
