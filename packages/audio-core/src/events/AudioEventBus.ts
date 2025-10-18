@@ -71,7 +71,7 @@ export class AudioEventBus {
     // Use Promise.allSettled to ensure all callbacks run even if some fail
     const results = await Promise.allSettled(
       callbacks.map(({ callback }) =>
-        Promise.resolve(callback(data))
+        Promise.resolve().then(() => callback(data))
       )
     );
 
