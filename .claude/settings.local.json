@@ -5,7 +5,19 @@
       "mcp__linear__list_projects",
       "mcp__linear__list_issues",
       "Bash(git worktree list)",
-      "Bash(git add -A)"
+      "Bash(git add -A)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Initialize bots-n-cats monorepo with audio-core foundation\n\nSet up TypeScript monorepo with workspaces for parallel development:\n- packages/audio-core: Core audio infrastructure (BOC-20)\n- packages/webhook-server: GitHub webhook processing (BOC-1, BOC-2, BOC-9)\n- packages/music-engine: Event-to-music mapping (BOC-3, BOC-4)\n\nBOC-20 Core Audio Infrastructure implemented:\n✅ ToneAudioCore: Singleton AudioContext manager\n✅ AudioEventBus: Event-driven pub/sub for decoupling webhooks from music\n✅ ResourceManager: Track and dispose Tone.js objects (prevent memory leaks)\n✅ InstrumentFactory: Factory pattern for instrument creation\n✅ Shared TypeScript types for all packages\n\nArchitecture follows production patterns:\n- Singleton pattern for AudioContext\n- Composition over inheritance\n- Event-driven coordination\n- Factory pattern for creation\n- Explicit resource management\n\nReady for parallel development via git worktrees.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git worktree add ../bots-webhook webhook-pipeline)",
+      "Bash(git worktree add ../bots-audio audio-services)",
+      "Bash(git worktree add ../bots-music music-generation)",
+      "Bash(git worktree add ../bots-cats cat-sounds)",
+      "Bash(git worktree add ../bots-stream streaming)",
+      "Bash(git worktree add -b webhook-pipeline ../bots-webhook main)",
+      "Bash(git worktree add -b audio-services ../bots-audio main)",
+      "Bash(git worktree add -b music-generation ../bots-music main)",
+      "Bash(git worktree add -b cat-sounds ../bots-cats main)",
+      "Bash(git worktree add -b streaming ../bots-stream main)",
+      "Bash(git commit -m \"$(cat <<''EOF''\ndocs: Add comprehensive CLAUDE.md and README for developers\n\nCreated detailed guides for parallel development:\n\nCLAUDE.md:\n- Complete agent development guide\n- Worktree → Issue mapping (5 parallel tracks)\n- Core dependencies and usage examples\n- Critical architectural patterns\n- Linear issues > tonejs-guide.md clarification\n- Development workflow and best practices\n\nREADME.md:\n- Project overview and features\n- Architecture and key principles\n- Package structure\n- Worktree organization\n- Quick start guide\n\nReady for parallel development across 5 worktrees:\n- ../bots-webhook (webhook-pipeline): BOC-1, 2, 9\n- ../bots-audio (audio-services): BOC-20 full implementation\n- ../bots-music (music-generation): BOC-3, 4\n- ../bots-cats (cat-sounds): BOC-11, 12\n- ../bots-stream (streaming): BOC-13\n\nFoundation complete. Subagents can now work independently!\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": [],
     "ask": []
