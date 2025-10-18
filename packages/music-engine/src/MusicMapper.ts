@@ -12,9 +12,9 @@ import {
   type NormalizedEvent,
   type GitHubEventType,
 } from '@bots-n-cats/audio-core';
-import { ParameterMapper } from './mappers/ParameterMapper';
-import { PatternGenerator } from './generators/PatternGenerator';
-import type { Pattern } from './types/musical';
+import { ParameterMapper } from './mappers/ParameterMapper.js';
+import { PatternGenerator } from './generators/PatternGenerator.js';
+import type { Pattern } from './types/musical.js';
 
 /**
  * Service interfaces (these will be implemented in audio-services branch)

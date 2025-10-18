@@ -3,12 +3,11 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "composite": true
+    "declaration": true,
+    "declarationMap": true,
+    "types": ["node", "jest"],
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
-  "references": [
-    {
-      "path": "../audio-core"
-    }
-  ]
+  "exclude": ["node_modules", "dist", "tests"]
 }

@@ -3,8 +3,8 @@
  * BOC-4: Pattern Generator
  */
 
-import type { Melody, Scale, Note, TimeNotation } from '../types/musical';
-import { NOTE_TO_MIDI } from '../constants/mappings';
+import type { Melody, Scale, Note, TimeNotation } from '../types/musical.js';
+import { NOTE_TO_MIDI } from '../constants/mappings.js';
 
 export class MelodyGenerator {
   /**

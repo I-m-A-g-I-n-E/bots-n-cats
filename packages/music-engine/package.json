@@ -1,6 +1,7 @@
 {
   "name": "@bots-n-cats/music-engine",
   "version": "1.0.0",
+  "type": "module",
   "description": "Music mapping and generation engine for bots-n-cats",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

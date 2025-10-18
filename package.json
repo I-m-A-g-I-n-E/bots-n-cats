@@ -15,7 +15,9 @@
     "build": "npm run build --workspaces",
     "test": "npm run test --workspaces",
     "dev": "npm run dev --workspaces --if-present",
-    "clean": "npm run clean --workspaces --if-present"
+    "clean": "npm run clean --workspaces --if-present",
+    "start:integrated": "npx tsx integrated-server.ts",
+    "start": "npm run start:integrated"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

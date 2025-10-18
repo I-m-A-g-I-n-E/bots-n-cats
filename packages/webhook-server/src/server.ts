@@ -6,6 +6,7 @@
 import express, { type Express } from 'express';
 import bodyParser from 'body-parser';
 import { AudioEventBus } from '@bots-n-cats/audio-core';
+import { MusicMapper } from '@bots-n-cats/music-engine';
 import { WebhookService } from './services/WebhookService.js';
 import { createWebhookRouter } from './routes/webhook.js';
 import { Logger } from './utils/logger.js';
@@ -20,6 +21,7 @@ export interface ServerInstance {
   app: Express;
   eventBus: AudioEventBus;
   webhookService: WebhookService;
+  musicMapper: MusicMapper;
   port: number;
 }
 
@@ -34,6 +36,10 @@ export function createServer(config: ServerConfig): ServerInstance {
 
   // Initialize WebhookService
   const webhookService = new WebhookService(eventBus, config.webhookSecret);
+
+  // Initialize MusicMapper to transform webhook events into music
+  const musicMapper = new MusicMapper(eventBus);
+  Logger.info('MusicMapper initialized and subscribed to webhook events');
 
   // Middleware: Parse JSON with raw body for signature validation
   // We need the raw body for HMAC verification
@@ -81,6 +87,7 @@ export function createServer(config: ServerConfig): ServerInstance {
     app,
     eventBus,
     webhookService,
+    musicMapper,
     port: config.port,
   };
 }

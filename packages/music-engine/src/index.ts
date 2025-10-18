@@ -10,18 +10,18 @@
  */
 
 // Core orchestrator
-export { MusicMapper, type MusicMapperConfig } from './MusicMapper';
+export { MusicMapper, type MusicMapperConfig } from './MusicMapper.js';
 
 // Mappers
-export { ParameterMapper } from './mappers/ParameterMapper';
-export { InstrumentMapper } from './mappers/InstrumentMapper';
-export { TempoMapper } from './mappers/TempoMapper';
-export { EffectsMapper } from './mappers/EffectsMapper';
+export { ParameterMapper } from './mappers/ParameterMapper.js';
+export { InstrumentMapper } from './mappers/InstrumentMapper.js';
+export { TempoMapper } from './mappers/TempoMapper.js';
+export { EffectsMapper } from './mappers/EffectsMapper.js';
 
 // Generators
-export { PatternGenerator } from './generators/PatternGenerator';
-export { ChordGenerator } from './generators/ChordGenerator';
-export { MelodyGenerator } from './generators/MelodyGenerator';
+export { PatternGenerator } from './generators/PatternGenerator.js';
+export { ChordGenerator } from './generators/ChordGenerator.js';
+export { MelodyGenerator } from './generators/MelodyGenerator.js';
 
 // Types
 export type {
@@ -42,7 +42,7 @@ export type {
   EmotionMapping,
   TempoMapping,
   LanguageMapping,
-} from './types/musical';
+} from './types/musical.js';
 
 // Constants
 export {
@@ -56,4 +56,4 @@ export {
   DEFAULT_EFFECT_PARAMS,
   LINES_TO_DURATION,
   INTENSITY_SCALING,
-} from './constants/mappings';
+} from './constants/mappings.js';
