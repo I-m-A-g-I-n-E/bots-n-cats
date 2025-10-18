@@ -1,0 +1,405 @@
+/**
+ * Cat Sound Catalog
+ * BOC-11: Source and prepare cat sound library (30+ sounds)
+ *
+ * All sounds are currently synthesized placeholders.
+ * Future: Replace with actual recorded cat sounds.
+ */
+
+import type { CatSound } from '../types/cat-sounds.js';
+
+/**
+ * Complete catalog of cat sounds organized by category
+ */
+export const CAT_SOUND_CATALOG: Record<string, CatSound> = {
+  // ============================================================================
+  // RHYTHMIC/PERCUSSIVE (for beats and rhythm)
+  // ============================================================================
+
+  purr_c2: {
+    id: 'purr_c2',
+    name: 'Deep Bass Purr',
+    category: 'rhythmic',
+    pitch: 'C2',
+    bpm: 120,
+    duration: 2.0,
+    loopable: true,
+    emotion: 'resolution',
+    description: 'Deep, resonant purr for bass line foundation'
+  },
+
+  purr_c3: {
+    id: 'purr_c3',
+    name: 'Mid-Range Purr',
+    category: 'rhythmic',
+    pitch: 'C3',
+    bpm: 130,
+    duration: 2.0,
+    loopable: true,
+    emotion: 'resolution',
+    description: 'Medium purr for rhythmic texture'
+  },
+
+  purr_ambient: {
+    id: 'purr_ambient',
+    name: 'Ambient Purr Pad',
+    category: 'rhythmic',
+    bpm: 120,
+    duration: 4.0,
+    loopable: true,
+    emotion: 'resolution',
+    description: 'Long, sustained purr for ambient padding'
+  },
+
+  chirp_percussion: {
+    id: 'chirp_percussion',
+    name: 'Percussion Chirp',
+    category: 'rhythmic',
+    duration: 0.15,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Short, sharp chirp for hi-hat patterns'
+  },
+
+  chirp_double: {
+    id: 'chirp_double',
+    name: 'Double Chirp',
+    category: 'rhythmic',
+    duration: 0.25,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Two quick chirps for snare-like hits'
+  },
+
+  breathing_slow: {
+    id: 'breathing_slow',
+    name: 'Slow Breathing',
+    category: 'rhythmic',
+    bpm: 60,
+    duration: 3.0,
+    loopable: true,
+    emotion: 'resolution',
+    description: 'Gentle breathing for ambient texture'
+  },
+
+  paw_tap_soft: {
+    id: 'paw_tap_soft',
+    name: 'Soft Paw Tap',
+    category: 'rhythmic',
+    duration: 0.1,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Subtle paw tap for gentle percussion'
+  },
+
+  paw_tap_double: {
+    id: 'paw_tap_double',
+    name: 'Double Paw Tap',
+    category: 'rhythmic',
+    duration: 0.2,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Two quick paw taps for rhythm'
+  },
+
+  // ============================================================================
+  // MELODIC (for musical phrases)
+  // ============================================================================
+
+  meow_c4: {
+    id: 'meow_c4',
+    name: 'Meow - C4',
+    category: 'melodic',
+    pitch: 'C4',
+    duration: 0.5,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Musical meow tuned to C4'
+  },
+
+  meow_d4: {
+    id: 'meow_d4',
+    name: 'Meow - D4',
+    category: 'melodic',
+    pitch: 'D4',
+    duration: 0.5,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Musical meow tuned to D4'
+  },
+
+  meow_e4: {
+    id: 'meow_e4',
+    name: 'Meow - E4',
+    category: 'melodic',
+    pitch: 'E4',
+    duration: 0.5,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Musical meow tuned to E4'
+  },
+
+  meow_f4: {
+    id: 'meow_f4',
+    name: 'Meow - F4',
+    category: 'melodic',
+    pitch: 'F4',
+    duration: 0.5,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Musical meow tuned to F4'
+  },
+
+  meow_g4: {
+    id: 'meow_g4',
+    name: 'Meow - G4',
+    category: 'melodic',
+    pitch: 'G4',
+    duration: 0.5,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Musical meow tuned to G4'
+  },
+
+  meow_a4: {
+    id: 'meow_a4',
+    name: 'Meow - A4',
+    category: 'melodic',
+    pitch: 'A4',
+    duration: 0.5,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Musical meow tuned to A4'
+  },
+
+  meow_b4: {
+    id: 'meow_b4',
+    name: 'Meow - B4',
+    category: 'melodic',
+    pitch: 'B4',
+    duration: 0.5,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Musical meow tuned to B4'
+  },
+
+  trill_c5: {
+    id: 'trill_c5',
+    name: 'Cat Trill - C5',
+    category: 'melodic',
+    pitch: 'C5',
+    duration: 0.8,
+    loopable: false,
+    emotion: 'resolution',
+    description: 'Melodic cat trill, high register'
+  },
+
+  trill_g4: {
+    id: 'trill_g4',
+    name: 'Cat Trill - G4',
+    category: 'melodic',
+    pitch: 'G4',
+    duration: 0.8,
+    loopable: false,
+    emotion: 'resolution',
+    description: 'Melodic cat trill, mid register'
+  },
+
+  question_meow: {
+    id: 'question_meow',
+    name: 'Question Meow',
+    category: 'melodic',
+    pitch: 'E4',
+    duration: 0.6,
+    loopable: false,
+    emotion: 'tension',
+    description: 'Rising pitch contour meow (questioning)'
+  },
+
+  content_meow: {
+    id: 'content_meow',
+    name: 'Content Meow',
+    category: 'melodic',
+    pitch: 'C4',
+    duration: 0.7,
+    loopable: false,
+    emotion: 'resolution',
+    description: 'Falling pitch contour meow (satisfied)'
+  },
+
+  // ============================================================================
+  // TEXTURAL (for ambiance and pads)
+  // ============================================================================
+
+  gentle_purr_pad: {
+    id: 'gentle_purr_pad',
+    name: 'Gentle Purr Pad',
+    category: 'textural',
+    duration: 5.0,
+    loopable: true,
+    emotion: 'resolution',
+    description: 'Long sustain purr for ambient pads'
+  },
+
+  kneading_rhythm: {
+    id: 'kneading_rhythm',
+    name: 'Kneading Rhythm',
+    category: 'textural',
+    bpm: 80,
+    duration: 2.0,
+    loopable: true,
+    emotion: 'resolution',
+    description: 'Rhythmic kneading sound texture'
+  },
+
+  grooming_ambient: {
+    id: 'grooming_ambient',
+    name: 'Grooming Ambiance',
+    category: 'textural',
+    duration: 3.0,
+    loopable: true,
+    emotion: 'resolution',
+    description: 'Quiet grooming sounds for background'
+  },
+
+  sleepy_sigh: {
+    id: 'sleepy_sigh',
+    name: 'Sleepy Sigh',
+    category: 'textural',
+    duration: 1.5,
+    loopable: false,
+    emotion: 'resolution',
+    description: 'Peaceful sigh for resolution moments'
+  },
+
+  stretch_yawn: {
+    id: 'stretch_yawn',
+    name: 'Stretch Yawn',
+    category: 'textural',
+    duration: 2.0,
+    loopable: false,
+    emotion: 'resolution',
+    description: 'Content stretch with yawn'
+  },
+
+  // ============================================================================
+  // EXPRESSIVE (for specific events)
+  // ============================================================================
+
+  excited_chirp: {
+    id: 'excited_chirp',
+    name: 'Excited Chirp',
+    category: 'expressive',
+    duration: 0.3,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Excited chirp for features/deploys'
+  },
+
+  happy_chirp_sequence: {
+    id: 'happy_chirp_sequence',
+    name: 'Happy Chirp Sequence',
+    category: 'expressive',
+    duration: 1.0,
+    loopable: false,
+    emotion: 'resolution',
+    description: 'Series of happy chirps for success'
+  },
+
+  playful_meow: {
+    id: 'playful_meow',
+    name: 'Playful Meow',
+    category: 'expressive',
+    duration: 0.4,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Playful meow for commits/activity'
+  },
+
+  gentle_chirp: {
+    id: 'gentle_chirp',
+    name: 'Gentle Chirp',
+    category: 'expressive',
+    duration: 0.2,
+    loopable: false,
+    emotion: 'activity',
+    description: 'Soft chirp for minor events'
+  },
+
+  disappointed_mrrp: {
+    id: 'disappointed_mrrp',
+    name: 'Disappointed Mrrp',
+    category: 'expressive',
+    duration: 0.5,
+    loopable: false,
+    emotion: 'tension',
+    description: 'Gentle disappointed sound for conflicts'
+  },
+
+  tiny_hiss: {
+    id: 'tiny_hiss',
+    name: 'Tiny Hiss',
+    category: 'expressive',
+    duration: 0.3,
+    loopable: false,
+    emotion: 'tension',
+    description: 'Very subtle hiss for test failures (musical)'
+  },
+
+  curious_trill: {
+    id: 'curious_trill',
+    name: 'Curious Trill',
+    category: 'expressive',
+    duration: 0.6,
+    loopable: false,
+    emotion: 'growth',
+    description: 'Curious trill for new features'
+  },
+
+  satisfied_purr_burst: {
+    id: 'satisfied_purr_burst',
+    name: 'Satisfied Purr Burst',
+    category: 'expressive',
+    duration: 1.0,
+    loopable: false,
+    emotion: 'resolution',
+    description: 'Happy purr burst for completed work'
+  },
+};
+
+/**
+ * Quick lookup by category
+ */
+export const SOUNDS_BY_CATEGORY = {
+  rhythmic: Object.values(CAT_SOUND_CATALOG).filter(s => s.category === 'rhythmic'),
+  melodic: Object.values(CAT_SOUND_CATALOG).filter(s => s.category === 'melodic'),
+  textural: Object.values(CAT_SOUND_CATALOG).filter(s => s.category === 'textural'),
+  expressive: Object.values(CAT_SOUND_CATALOG).filter(s => s.category === 'expressive'),
+};
+
+/**
+ * Melodic samples organized by pitch for sampler
+ */
+export const MELODIC_SAMPLES_BY_PITCH = {
+  'C4': 'meow_c4',
+  'D4': 'meow_d4',
+  'E4': 'meow_e4',
+  'F4': 'meow_f4',
+  'G4': 'meow_g4',
+  'A4': 'meow_a4',
+  'B4': 'meow_b4',
+  'C5': 'trill_c5',
+};
+
+/**
+ * Rhythmic purr samples by pitch
+ */
+export const PURR_SAMPLES_BY_PITCH = {
+  'C2': 'purr_c2',
+  'C3': 'purr_c3',
+};
+
+/**
+ * Total sound count for verification
+ */
+export const TOTAL_SOUND_COUNT = Object.keys(CAT_SOUND_CATALOG).length;
