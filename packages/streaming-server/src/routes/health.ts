@@ -4,8 +4,8 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { StreamingService } from '../services/StreamingService';
-import { SSEManager } from '../services/SSEManager';
+import { StreamingService } from '../services/StreamingService.js';
+import { SSEManager } from '../services/SSEManager.js';
 
 export function createHealthRouter(
   streamingService: StreamingService,

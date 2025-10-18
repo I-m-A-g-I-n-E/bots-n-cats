@@ -7,10 +7,10 @@
 
 import * as Tone from 'tone';
 import { AudioEventBus, MultiClientAudioManager } from '@bots-n-cats/audio-core';
-import { OfflineRenderer } from './OfflineRenderer';
-import { SSEManager } from './SSEManager';
-import { BufferSerializer } from '../utils/buffer-serializer';
-import { MusicGeneratedEvent, MusicalParameters, AudioBufferMessage } from '../types';
+import { OfflineRenderer } from './OfflineRenderer.js';
+import { SSEManager } from './SSEManager.js';
+import { BufferSerializer } from '../utils/buffer-serializer.js';
+import { MusicGeneratedEvent, MusicalParameters, AudioBufferMessage } from '../types/index.js';
 
 export class StreamingService {
   private readonly eventBus: AudioEventBus;

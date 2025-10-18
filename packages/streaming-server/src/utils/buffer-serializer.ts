@@ -4,7 +4,7 @@
  * BOC-13: Real-time streaming system
  */
 
-import { SerializedBuffer } from '../types';
+import { SerializedBuffer } from '../types/index.js';
 
 export class BufferSerializer {
   /**

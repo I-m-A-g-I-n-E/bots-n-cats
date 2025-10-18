@@ -7,11 +7,11 @@
 import express, { Express } from 'express';
 import cors from 'cors';
 import { AudioEventBus, ClientSessionManager, MultiClientAudioManager } from '@bots-n-cats/audio-core';
-import { StreamingService } from './services/StreamingService';
-import { OfflineRenderer } from './services/OfflineRenderer';
-import { SSEManager } from './services/SSEManager';
-import { createStreamRouter } from './routes/stream';
-import { createHealthRouter } from './routes/health';
+import { StreamingService } from './services/StreamingService.js';
+import { OfflineRenderer } from './services/OfflineRenderer.js';
+import { SSEManager } from './services/SSEManager.js';
+import { createStreamRouter } from './routes/stream.js';
+import { createHealthRouter } from './routes/health.js';
 
 export interface ServerConfig {
   port?: number;

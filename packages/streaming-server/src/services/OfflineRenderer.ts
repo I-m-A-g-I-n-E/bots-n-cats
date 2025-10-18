@@ -5,7 +5,7 @@
  */
 
 import * as Tone from 'tone';
-import { MusicalParameters, Pattern } from '../types';
+import { MusicalParameters, Pattern } from '../types/index.js';
 
 export class OfflineRenderer {
   /**

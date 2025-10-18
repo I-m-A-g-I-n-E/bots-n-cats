@@ -5,7 +5,7 @@
  */
 
 import { Response } from 'express';
-import { SSEClient, SSEMessage, SSEMessageType } from '../types';
+import { SSEClient, SSEMessage, SSEMessageType } from '../types/index.js';
 
 export class SSEManager {
   private clients = new Map<string, SSEClient>();
