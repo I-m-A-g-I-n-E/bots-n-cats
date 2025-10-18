@@ -5,6 +5,7 @@
  */
 
 import express, { Express } from 'express';
+import path from 'path';
 import cors from 'cors';
 import { AudioEventBus, ClientSessionManager, MultiClientAudioManager } from '@bots-n-cats/audio-core';
 import { StreamingService } from './services/StreamingService.js';
@@ -29,6 +30,10 @@ export function createStreamingServer(config: ServerConfig = {}) {
   }));
   app.use(express.json());
   app.use(express.static('client')); // Serve static client files
+
+  app.get('/assets/logo.svg', (_req, res) => {
+    res.sendFile(path.resolve(process.cwd(), 'packages/streaming-server/logo.svg'));
+  });
 
   // Initialize services
   const eventBus = new AudioEventBus();
