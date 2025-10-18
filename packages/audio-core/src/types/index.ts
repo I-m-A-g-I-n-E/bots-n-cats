@@ -26,7 +26,9 @@ export type ToneResource =
   | Tone.Sampler
   | Tone.Player
   | Tone.ToneAudioBuffer
-  | Tone.Effect;
+  | Tone.Reverb
+  | Tone.Delay
+  | Tone.Filter;
 
 /**
  * Instrument types supported by InstrumentFactory

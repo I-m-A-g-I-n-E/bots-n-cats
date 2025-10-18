@@ -6,7 +6,7 @@
  * Webhook Handler publishes events → Services subscribe and respond
  */
 
-import { EventCallback, UnsubscribeFn, Subscription } from '../types';
+import { EventCallback, UnsubscribeFn, Subscription } from '../types/index.js';
 
 export class AudioEventBus {
   private subscribers: Map<string, Subscription[]>;

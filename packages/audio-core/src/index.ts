@@ -7,16 +7,16 @@
  */
 
 // Core
-export { ToneAudioCore } from './core/ToneAudioCore';
+export { ToneAudioCore } from './core/ToneAudioCore.js';
 
 // Events
-export { AudioEventBus } from './events/AudioEventBus';
+export { AudioEventBus } from './events/AudioEventBus.js';
 
 // Resources
-export { ResourceManager } from './resources/ResourceManager';
+export { ResourceManager } from './resources/ResourceManager.js';
 
 // Factories
-export { InstrumentFactory } from './factories/InstrumentFactory';
+export { InstrumentFactory } from './factories/InstrumentFactory.js';
 
 // Types
-export * from './types';
+export * from './types/index.js';

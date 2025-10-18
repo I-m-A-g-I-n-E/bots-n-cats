@@ -7,7 +7,7 @@
  */
 
 import * as Tone from 'tone';
-import { AudioCoreConfig } from '../types';
+import { AudioCoreConfig } from '../types/index.js';
 
 export class ToneAudioCore {
   private static instance: ToneAudioCore | null = null;

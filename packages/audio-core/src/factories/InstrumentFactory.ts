@@ -7,7 +7,7 @@
  */
 
 import * as Tone from 'tone';
-import { InstrumentType, InstrumentOptions } from '../types';
+import { InstrumentType, InstrumentOptions } from '../types/index.js';
 
 export class InstrumentFactory {
   /**
@@ -19,7 +19,7 @@ export class InstrumentFactory {
   public static create(
     type: InstrumentType,
     options: InstrumentOptions = {}
-  ): Tone.Instrument {
+  ): Tone.Synth | Tone.FMSynth | Tone.PolySynth | Tone.Sampler {
     switch (type) {
       case 'synth':
         return new Tone.Synth(options);
@@ -46,7 +46,7 @@ export class InstrumentFactory {
    * @param preset Preset name
    * @returns Configured synth
    */
-  public static createPreset(preset: string): Tone.Instrument {
+  public static createPreset(preset: string): Tone.Synth | Tone.PolySynth {
     switch (preset) {
       case 'bass':
         return new Tone.Synth({
@@ -56,11 +56,6 @@ export class InstrumentFactory {
             decay: 0.2,
             sustain: 0.3,
             release: 0.8,
-          },
-          filter: {
-            Q: 6,
-            type: 'lowpass',
-            rolloff: -24,
           },
         });
 
@@ -109,8 +104,8 @@ export class InstrumentFactory {
     type: InstrumentType,
     count: number,
     options: InstrumentOptions = {}
-  ): Tone.Instrument[] {
-    const pool: Tone.Instrument[] = [];
+  ): Array<Tone.Synth | Tone.FMSynth | Tone.PolySynth | Tone.Sampler> {
+    const pool: Array<Tone.Synth | Tone.FMSynth | Tone.PolySynth | Tone.Sampler> = [];
     for (let i = 0; i < count; i++) {
       pool.push(InstrumentFactory.create(type, options));
     }

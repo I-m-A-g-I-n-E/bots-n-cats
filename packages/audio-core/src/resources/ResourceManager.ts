@@ -6,7 +6,7 @@
  * ResourceManager ensures no memory leaks in long-running applications
  */
 
-import { ToneResource, ResourceEntry } from '../types';
+import { ToneResource, ResourceEntry } from '../types/index.js';
 
 export class ResourceManager {
   private resources: Map<string, ResourceEntry>;

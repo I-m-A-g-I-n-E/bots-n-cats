@@ -2,6 +2,7 @@
   "name": "@bots-n-cats/audio-core",
   "version": "1.0.0",
   "description": "Core audio infrastructure for bots-n-cats - AudioEventBus, ResourceManager, Factories",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

@@ -2,6 +2,7 @@
   "name": "bots-n-cats",
   "version": "1.0.0",
   "description": "GitHub Activity Soundtrack SaaS - Where your code purrs and your deploys meow!",
+  "type": "module",
   "private": true,
   "workspaces": [
     "packages/audio-core",
