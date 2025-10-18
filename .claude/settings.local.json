@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__linear__get_project",
+      "mcp__linear__list_projects",
+      "mcp__linear__list_issues",
+      "Bash(git worktree list)",
+      "Bash(git add -A)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

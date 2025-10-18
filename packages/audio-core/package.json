@@ -1,0 +1,20 @@
+{
+  "name": "@bots-n-cats/audio-core",
+  "version": "1.0.0",
+  "description": "Core audio infrastructure for bots-n-cats - AudioEventBus, ResourceManager, Factories",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "clean": "rm -rf dist",
+    "test": "echo \"Tests coming soon\""
+  },
+  "dependencies": {
+    "tone": "^14.7.77"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  }
+}

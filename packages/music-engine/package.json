@@ -1,0 +1,21 @@
+{
+  "name": "@bots-n-cats/music-engine",
+  "version": "1.0.0",
+  "description": "Music mapping and generation engine for bots-n-cats",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "clean": "rm -rf dist",
+    "test": "echo \"Tests coming soon\""
+  },
+  "dependencies": {
+    "@bots-n-cats/audio-core": "workspace:*",
+    "tone": "^14.7.77"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  }
+}

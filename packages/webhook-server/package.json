@@ -1,0 +1,27 @@
+{
+  "name": "@bots-n-cats/webhook-server",
+  "version": "1.0.0",
+  "description": "GitHub webhook server for bots-n-cats",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist",
+    "test": "echo \"Tests coming soon\""
+  },
+  "dependencies": {
+    "@bots-n-cats/audio-core": "workspace:*",
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
