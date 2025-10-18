@@ -1,14 +1,14 @@
 {
   "name": "@bots-n-cats/streaming-server",
   "version": "1.0.0",
+  "type": "module",
   "description": "Real-time audio streaming server using SSE for bots-n-cats",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch",
-    "start": "node dist/index.js",
-    "dev:server": "ts-node src/index.ts",
+    "dev": "nodemon --exec tsx start-server.js",
+    "start": "tsx start-server.js",
     "clean": "rm -rf dist",
     "test": "echo \"Tests coming soon\""
   },
