@@ -4,8 +4,8 @@
  */
 
 import type { NormalizedEvent, EmotionCategory } from '@bots-n-cats/audio-core';
-import type { EffectConfig } from '../types/musical';
-import { EMOTION_MAPPINGS, DEFAULT_EFFECT_PARAMS, INTENSITY_SCALING } from '../constants/mappings';
+import type { EffectConfig } from '../types/musical.js';
+import { EMOTION_MAPPINGS, DEFAULT_EFFECT_PARAMS, INTENSITY_SCALING } from '../constants/mappings.js';
 
 export class EffectsMapper {
   /**

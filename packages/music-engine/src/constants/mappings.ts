@@ -4,7 +4,7 @@
  */
 
 import type { EmotionCategory } from '@bots-n-cats/audio-core';
-import type { EmotionMapping, TempoMapping, LanguageMapping, Scale } from '../types/musical';
+import type { EmotionMapping, TempoMapping, LanguageMapping, Scale } from '../types/musical.js';
 
 /**
  * Emotion categories mapped to musical characteristics

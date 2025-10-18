@@ -4,16 +4,16 @@
  */
 
 import type { NormalizedEvent } from '@bots-n-cats/audio-core';
-import type { MusicalParameters, InstrumentOptions, Scale } from '../types/musical';
-import { InstrumentMapper } from './InstrumentMapper';
-import { TempoMapper } from './TempoMapper';
-import { EffectsMapper } from './EffectsMapper';
+import type { MusicalParameters, InstrumentOptions, Scale } from '../types/musical.js';
+import { InstrumentMapper } from './InstrumentMapper.js';
+import { TempoMapper } from './TempoMapper.js';
+import { EffectsMapper } from './EffectsMapper.js';
 import {
   EMOTION_MAPPINGS,
   SCALES,
   NOTE_TO_MIDI,
   LINES_TO_DURATION,
-} from '../constants/mappings';
+} from '../constants/mappings.js';
 
 export class ParameterMapper {
   /**

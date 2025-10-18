@@ -3,11 +3,11 @@
  * BOC-4: Pattern Generator
  */
 
-import type { MusicalParameters, Pattern, TimeNotation } from '../types/musical';
-import { MelodyGenerator } from './MelodyGenerator';
-import { ChordGenerator } from './ChordGenerator';
-import { ParameterMapper } from '../mappers/ParameterMapper';
-import { TIME_DIVISIONS } from '../constants/mappings';
+import type { MusicalParameters, Pattern, TimeNotation } from '../types/musical.js';
+import { MelodyGenerator } from './MelodyGenerator.js';
+import { ChordGenerator } from './ChordGenerator.js';
+import { ParameterMapper } from '../mappers/ParameterMapper.js';
+import { TIME_DIVISIONS } from '../constants/mappings.js';
 
 export class PatternGenerator {
   /**

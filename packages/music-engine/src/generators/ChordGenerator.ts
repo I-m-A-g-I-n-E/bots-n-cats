@@ -4,8 +4,8 @@
  */
 
 import type { EmotionCategory } from '@bots-n-cats/audio-core';
-import type { Chord, ChordProgression, Note, MusicalKey, TimeNotation } from '../types/musical';
-import { EMOTION_MAPPINGS, CHORD_INTERVALS, NOTE_TO_MIDI } from '../constants/mappings';
+import type { Chord, ChordProgression, Note, MusicalKey, TimeNotation } from '../types/musical.js';
+import { EMOTION_MAPPINGS, CHORD_INTERVALS, NOTE_TO_MIDI } from '../constants/mappings.js';
 
 export class ChordGenerator {
   /**

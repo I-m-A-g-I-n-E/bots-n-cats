@@ -3,7 +3,7 @@
  * BOC-3: Music Mapping Engine
  */
 
-import { TEMPO_MAPPINGS } from '../constants/mappings';
+import { TEMPO_MAPPINGS } from '../constants/mappings.js';
 
 export class TempoMapper {
   /**

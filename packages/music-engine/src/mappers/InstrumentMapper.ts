@@ -4,7 +4,7 @@
  */
 
 import type { InstrumentType } from '@bots-n-cats/audio-core';
-import { LANGUAGE_MAPPINGS } from '../constants/mappings';
+import { LANGUAGE_MAPPINGS } from '../constants/mappings.js';
 
 export class InstrumentMapper {
   /**
