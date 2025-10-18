@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bots-n-cats - Live Soundtrack Stream</title>
+  <script src="https://unpkg.com/tone@14.7.77"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      color: #333;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #667eea;
+      text-align: center;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .status {
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .status.disconnected {
+      background: #fee;
+      color: #c33;
+    }
+
+    .status.connecting {
+      background: #ffeaa7;
+      color: #d63031;
+    }
+
+    .status.connected {
+      background: #d5f5e3;
+      color: #27ae60;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 1rem;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .log {
+      background: #f5f5f5;
+      border-radius: 10px;
+      padding: 1rem;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      margin-top: 1.5rem;
+    }
+
+    .log-entry {
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-left: 3px solid #667eea;
+      background: white;
+      border-radius: 4px;
+    }
+
+    .log-entry.error {
+      border-left-color: #e74c3c;
+      background: #fee;
+    }
+
+    .log-entry.success {
+      border-left-color: #27ae60;
+      background: #d5f5e3;
+    }
+
+    .timestamp {
+      color: #999;
+      font-size: 0.75rem;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .metric {
+      background: #f5f5f5;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .metric-label {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🐱 bots-n-cats</h1>
+    <p class="subtitle">Live Soundtrack Stream</p>
+
+    <div id="status" class="status disconnected">Disconnected</div>
+
+    <div class="input-group">
+      <label for="repoId">Repository (owner/repo)</label>
+      <input
+        type="text"
+        id="repoId"
+        placeholder="e.g., facebook/react"
+        value="owner/repo-name"
+      >
+    </div>
+
+    <div class="input-group">
+      <label for="serverUrl">Server URL</label>
+      <input
+        type="text"
+        id="serverUrl"
+        placeholder="http://localhost:3001"
+        value="http://localhost:3001"
+      >
+    </div>
+
+    <button id="connectBtn">Connect to Stream</button>
+    <button id="disconnectBtn" disabled>Disconnect</button>
+    <button id="testAudioBtn" disabled>Generate Test Audio</button>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value" id="audioCount">0</div>
+        <div class="metric-label">Audio Received</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value" id="heartbeatCount">0</div>
+        <div class="metric-label">Heartbeats</div>
+      </div>
+    </div>
+
+    <div class="log" id="log">
+      <div class="log-entry">
+        <div class="timestamp">Ready to connect</div>
+        Enter a repository and click "Connect to Stream"
+      </div>
+    </div>
+  </div>
+
+  <script src="client.js"></script>
+</body>
+</html>
