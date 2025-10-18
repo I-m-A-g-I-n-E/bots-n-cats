@@ -425,7 +425,7 @@ Each package should have:
 ```json
 {
   "dependencies": {
-    "@bots-n-cats/audio-core": "workspace:*",
+    "@bots-n-cats/audio-core": "*",
     "tone": "^14.7.77"
   },
   "devDependencies": {
