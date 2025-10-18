@@ -5,40 +5,15 @@
  */
 
 // Main server
-export { createStreamingServer } from './server';
+export { createStreamingServer } from './server.js';
 
 // Services
-export { StreamingService } from './services/StreamingService';
-export { OfflineRenderer } from './services/OfflineRenderer';
-export { SSEManager } from './services/SSEManager';
+export { StreamingService } from './services/StreamingService.js';
+export { OfflineRenderer } from './services/OfflineRenderer.js';
+export { SSEManager } from './services/SSEManager.js';
 
 // Utilities
-export { BufferSerializer } from './utils/buffer-serializer';
+export { BufferSerializer } from './utils/buffer-serializer.js';
 
 // Types
-export * from './types';
-
-// CLI Entry Point
-if (require.main === module) {
-  const { createStreamingServer } = require('./server');
-
-  const server = createStreamingServer({
-    port: parseInt(process.env.PORT || '3001'),
-    corsOrigin: process.env.CORS_ORIGIN || '*',
-  });
-
-  server.start();
-
-  // Graceful shutdown
-  process.on('SIGINT', () => {
-    console.log('\n[Server] Received SIGINT, shutting down gracefully...');
-    server.stop();
-    process.exit(0);
-  });
-
-  process.on('SIGTERM', () => {
-    console.log('\n[Server] Received SIGTERM, shutting down gracefully...');
-    server.stop();
-    process.exit(0);
-  });
-}
+export * from './types/index.js';
