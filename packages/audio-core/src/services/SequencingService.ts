@@ -10,6 +10,7 @@ import * as Tone from 'tone';
 import { TransportService } from './TransportService.js';
 import { AudioEventBus } from '../events/AudioEventBus.js';
 import { ResourceManager } from '../resources/ResourceManager.js';
+import { ToneInstrument } from '../types/index.js';
 
 export interface MusicalPattern {
   notes: (string | null)[];
@@ -54,7 +55,7 @@ export class SequencingService {
   public schedulePattern(
     pattern: MusicalPattern,
     instrumentId: string,
-    instrument: Tone.Instrument
+    instrument: ToneInstrument
   ): SequenceHandle {
     const subdivision = pattern.subdivision || '8n';
 
@@ -100,7 +101,7 @@ export class SequencingService {
   public scheduleNotes(
     notes: (string | null)[],
     instrumentId: string,
-    instrument: Tone.Instrument,
+    instrument: ToneInstrument,
     subdivision: Tone.Unit.Time = '8n'
   ): SequenceHandle {
     const pattern: MusicalPattern = {
@@ -119,7 +120,7 @@ export class SequencingService {
     note: string,
     time: Tone.Unit.Time,
     duration: Tone.Unit.Time,
-    instrument: Tone.Instrument,
+    instrument: ToneInstrument,
     velocity: number = 0.8
   ): number {
     const eventId = this.transportService.schedule((scheduleTime) => {

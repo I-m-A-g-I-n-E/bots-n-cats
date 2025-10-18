@@ -9,7 +9,7 @@
 import * as Tone from 'tone';
 import { InstrumentFactory } from '../factories/InstrumentFactory.js';
 import { AudioEventBus } from '../events/AudioEventBus.js';
-import { InstrumentType, InstrumentOptions } from '../types/index.js';
+import { InstrumentType, InstrumentOptions, ToneInstrument } from '../types/index.js';
 
 export interface PoolStats {
   total: number;
@@ -24,8 +24,8 @@ export class SynthPool {
   private synthClass: InstrumentType | string;
   private options: InstrumentOptions;
   private poolSize: number;
-  private available: Tone.Instrument[];
-  private inUse: Set<Tone.Instrument>;
+  private available: ToneInstrument[];
+  private inUse: Set<ToneInstrument>;
   private eventBus?: AudioEventBus;
 
   // Statistics tracking
@@ -80,7 +80,7 @@ export class SynthPool {
   /**
    * Create a new synth instance
    */
-  private createSynth(): Tone.Instrument {
+  private createSynth(): ToneInstrument {
     // Check if synthClass is a preset or instrument type
     if (
       this.synthClass === 'synth' ||
@@ -102,8 +102,8 @@ export class SynthPool {
    * Acquire a synth from the pool
    * If pool is empty, creates a new synth (pool expansion)
    */
-  public acquire(): Tone.Instrument {
-    let synth: Tone.Instrument;
+  public acquire(): ToneInstrument {
+    let synth: ToneInstrument;
 
     if (this.available.length > 0) {
       // Get from available pool
@@ -134,7 +134,7 @@ export class SynthPool {
   /**
    * Release a synth back to the pool
    */
-  public release(synth: Tone.Instrument): void {
+  public release(synth: ToneInstrument): void {
     if (!this.inUse.has(synth)) {
       console.warn('Attempting to release synth not from this pool');
       return;
@@ -158,7 +158,7 @@ export class SynthPool {
   /**
    * Reset synth to default state
    */
-  private resetSynth(synth: Tone.Instrument): void {
+  private resetSynth(synth: ToneInstrument): void {
     // Ensure all notes are released
     if ('releaseAll' in synth && typeof synth.releaseAll === 'function') {
       synth.releaseAll();

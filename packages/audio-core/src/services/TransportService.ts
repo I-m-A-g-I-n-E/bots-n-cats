@@ -193,7 +193,7 @@ export class TransportService {
   /**
    * Set swing subdivision
    */
-  public setSwingSubdivision(subdivision: Tone.Unit.Time): void {
+  public setSwingSubdivision(subdivision: Tone.Unit.Subdivision): void {
     this.transport.swingSubdivision = subdivision;
     this.eventBus.publishSync('transport:swing:subdivision:changed', {
       subdivision,

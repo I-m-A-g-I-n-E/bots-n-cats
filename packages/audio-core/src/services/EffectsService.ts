@@ -9,6 +9,7 @@
 import * as Tone from 'tone';
 import { ResourceManager } from '../resources/ResourceManager.js';
 import { AudioEventBus } from '../events/AudioEventBus.js';
+import { ToneEffect } from '../types/index.js';
 
 export type EffectType =
   | 'reverb'
@@ -28,7 +29,7 @@ export interface EffectOptions {
 
 export interface EffectHandle {
   id: string;
-  effect: Tone.Effect;
+  effect: ToneEffect;
   type: EffectType;
 }
 
@@ -42,7 +43,7 @@ export interface EffectChain {
 export class EffectsService {
   private resources: ResourceManager;
   private eventBus: AudioEventBus;
-  private activeEffects: Map<string, Tone.Effect>;
+  private activeEffects: Map<string, ToneEffect>;
   private effectChains: Map<string, EffectChain>;
   private effectCounter: number;
   private chainCounter: number;
@@ -60,7 +61,7 @@ export class EffectsService {
    * Create a single effect
    */
   public createEffect(type: EffectType, options?: EffectOptions): EffectHandle {
-    let effect: Tone.Effect;
+    let effect: ToneEffect;
 
     switch (type) {
       case 'reverb':
@@ -131,7 +132,7 @@ export class EffectsService {
     });
 
     // Chain effects together
-    let previousEffect: Tone.Effect | null = null;
+    let previousEffect: ToneEffect | null = null;
     effectHandles.forEach((handle) => {
       if (previousEffect) {
         previousEffect.connect(handle.effect);
@@ -250,15 +251,21 @@ export class EffectsService {
       throw new Error('Wet amount must be between 0 and 1');
     }
 
-    effect.wet.value = wetAmount;
-    this.eventBus.publishSync('effects:wet:changed', { id, wetAmount });
-    return true;
+    // Check if effect has wet property (not all effects do)
+    if ('wet' in effect && effect.wet) {
+      effect.wet.value = wetAmount;
+      this.eventBus.publishSync('effects:wet:changed', { id, wetAmount });
+      return true;
+    } else {
+      console.warn(`Effect ${id} does not support wet/dry control`);
+      return false;
+    }
   }
 
   /**
    * Get effect by ID
    */
-  public getEffect(id: string): Tone.Effect | undefined {
+  public getEffect(id: string): ToneEffect | undefined {
     return this.activeEffects.get(id);
   }
 

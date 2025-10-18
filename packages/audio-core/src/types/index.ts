@@ -16,6 +16,26 @@ export type EventCallback<T = any> = (data: T) => void | Promise<void>;
 export type UnsubscribeFn = () => void;
 
 /**
+ * Tone.js instrument union type (Tone.Instrument doesn't exist as an export)
+ */
+export type ToneInstrument = Tone.Synth | Tone.FMSynth | Tone.PolySynth | Tone.Sampler;
+
+/**
+ * Tone.js effect union type (Tone.Effect doesn't exist as an export)
+ */
+export type ToneEffect =
+  | Tone.Reverb
+  | Tone.FeedbackDelay
+  | Tone.Distortion
+  | Tone.Chorus
+  | Tone.Filter
+  | Tone.Compressor
+  | Tone.Phaser
+  | Tone.Tremolo
+  | Tone.Vibrato
+  | Tone.AutoWah;
+
+/**
  * Resource types that can be tracked by ResourceManager
  */
 export type ToneResource =
@@ -26,6 +46,7 @@ export type ToneResource =
   | Tone.Sampler
   | Tone.Player
   | Tone.ToneAudioBuffer
+  | Tone.Sequence
   | Tone.Reverb
   | Tone.Delay
   | Tone.Filter;

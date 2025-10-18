@@ -10,11 +10,11 @@ import * as Tone from 'tone';
 import { InstrumentFactory } from '../factories/InstrumentFactory.js';
 import { ResourceManager } from '../resources/ResourceManager.js';
 import { AudioEventBus } from '../events/AudioEventBus.js';
-import { InstrumentType, InstrumentOptions, EmotionCategory } from '../types/index.js';
+import { InstrumentType, InstrumentOptions, EmotionCategory, ToneInstrument } from '../types/index.js';
 
 export interface AudioInstrumentHandle {
   id: string;
-  instrument: Tone.Instrument;
+  instrument: ToneInstrument;
 }
 
 export interface EmotionTransformation {
@@ -29,7 +29,7 @@ export class AudioService {
   private factory: typeof InstrumentFactory;
   private resources: ResourceManager;
   private eventBus: AudioEventBus;
-  private activeInstruments: Map<string, Tone.Instrument>;
+  private activeInstruments: Map<string, ToneInstrument>;
 
   constructor(
     factory: typeof InstrumentFactory,
@@ -138,7 +138,7 @@ export class AudioService {
   /**
    * Get instrument by ID
    */
-  public getInstrument(id: string): Tone.Instrument | undefined {
+  public getInstrument(id: string): ToneInstrument | undefined {
     return this.activeInstruments.get(id);
   }
 
