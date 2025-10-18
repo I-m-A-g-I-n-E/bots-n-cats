@@ -13,6 +13,7 @@ build/
 .env.local
 .env.*.local
 
+
 # Logs
 logs/
 *.log
