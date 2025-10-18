@@ -96,3 +96,24 @@ export interface NormalizedEvent {
   metadata: Record<string, any>;
   timestamp: number;
 }
+
+/**
+ * Service Layer Types
+ */
+
+// Re-export service-specific types
+export type { AudioInstrumentHandle, EmotionTransformation } from '../services/AudioService.js';
+export type { TransportState, TransportStatus } from '../services/TransportService.js';
+export type { MusicalPattern, SequenceHandle } from '../services/SequencingService.js';
+export type { EffectType, EffectOptions, EffectHandle, EffectChain } from '../services/EffectsService.js';
+
+/**
+ * Object Pooling Types
+ */
+export type { PoolStats } from '../pooling/SynthPool.js';
+
+/**
+ * Session Management Types
+ */
+export type { ClientSession, SessionStats } from '../session/ClientSessionManager.js';
+export type { AudioBuffer, StreamingSession, HealthMetrics } from '../session/MultiClientAudioManager.js';
