@@ -13,7 +13,6 @@ build/
 .env.local
 .env.*.local
 
-
 # Logs
 logs/
 *.log
@@ -39,5 +38,5 @@ coverage/
 tmp/
 temp/
 .ipynb_checkpoints/monitor-dashboard-checkpoint.ipynb
-.claude/settings.local.json
 monitor-dashboard.ipynb
+.claude/settings.local.json
