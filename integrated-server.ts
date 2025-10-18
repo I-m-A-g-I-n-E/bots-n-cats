@@ -102,8 +102,8 @@ async function main() {
     // Middleware for webhook server
     webhookApp.use(
       bodyParser.json({
-        verify: (req: any, res, buf) => {
-          req.rawBody = buf.toString('utf8');
+        verify: (req: express.Request, res, buf) => {
+          (req as express.Request & { rawBody?: string }).rawBody = buf.toString('utf8');
         },
       })
     );
