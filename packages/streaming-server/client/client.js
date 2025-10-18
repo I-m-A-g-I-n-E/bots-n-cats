@@ -97,8 +97,9 @@ async function connect() {
     setStatus('connecting', 'Connecting...');
     addLog(`Connecting to ${serverUrl}/stream/${repoId}...`);
 
-    // Create SSE connection
-    const streamUrl = `${serverUrl}/stream/${repoId}?clientId=${clientId}`;
+    // Create SSE connection (URL-encode repoId to handle slashes)
+    const encodedRepoId = encodeURIComponent(repoId);
+    const streamUrl = `${serverUrl}/stream/${encodedRepoId}?clientId=${clientId}`;
     eventSource = new EventSource(streamUrl);
 
     // Handle connection open
@@ -243,11 +244,12 @@ function deserializeBuffer(data) {
 async function triggerTestAudio() {
   const repoId = repoIdInput.value.trim();
   const serverUrl = serverUrlInput.value.trim();
+  const encodedRepoId = encodeURIComponent(repoId);
 
   try {
     addLog('Requesting test audio generation...');
 
-    const response = await fetch(`${serverUrl}/stream/${repoId}/test`, {
+    const response = await fetch(`${serverUrl}/stream/${encodedRepoId}/test`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
