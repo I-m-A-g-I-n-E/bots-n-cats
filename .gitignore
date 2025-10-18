@@ -38,3 +38,5 @@ coverage/
 *.tmp
 tmp/
 temp/
+.ipynb_checkpoints/monitor-dashboard-checkpoint.ipynb
+.claude/settings.local.json
