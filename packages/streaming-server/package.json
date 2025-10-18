@@ -13,7 +13,7 @@
     "test": "echo \"Tests coming soon\""
   },
   "dependencies": {
-    "@bots-n-cats/audio-core": "workspace:*",
+    "@bots-n-cats/audio-core": "*",
     "express": "^4.18.2",
     "cors": "^2.8.5",
     "uuid": "^9.0.1",

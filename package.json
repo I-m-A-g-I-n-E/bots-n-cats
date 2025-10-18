@@ -7,7 +7,9 @@
   "workspaces": [
     "packages/audio-core",
     "packages/webhook-server",
-    "packages/music-engine"
+    "packages/music-engine",
+    "packages/cat-sounds",
+    "packages/streaming-server"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
