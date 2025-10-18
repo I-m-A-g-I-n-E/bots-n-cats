@@ -21,11 +21,27 @@ const testAudioBtn = document.getElementById('testAudioBtn');
 const logEl = document.getElementById('log');
 const audioCountEl = document.getElementById('audioCount');
 const heartbeatCountEl = document.getElementById('heartbeatCount');
+const logoContainer = document.getElementById('logoContainer');
+
+// Logo animation state
+let logoDots = [];
+let activeLogoDots = [];
+let logoPulseLoop = null;
+let logoBeatIndex = 0;
+const accentPattern = [
+  { offset: 0, width: 2.1, accent: true },
+  { offset: 1.6, width: 1.15, accent: false },
+  { offset: 0.75, width: 1.6, accent: true },
+  { offset: 2.5, width: 1, accent: false },
+];
 
 // Event Handlers
 connectBtn.addEventListener('click', connect);
 disconnectBtn.addEventListener('click', disconnect);
 testAudioBtn.addEventListener('click', triggerTestAudio);
+
+// Load logo and prepare animation
+loadLogo();
 
 /**
  * Generate a unique client ID
@@ -87,6 +103,7 @@ async function connect() {
       await Tone.start();
       audioContext = Tone.context;
       addLog('Audio context initialized', 'success');
+      ensureLogoAnimation();
     }
 
     // Close existing connection
@@ -157,6 +174,19 @@ function disconnect() {
   connectBtn.disabled = false;
   disconnectBtn.disabled = true;
   testAudioBtn.disabled = true;
+}
+
+/**
+ * Ensure the logo animation is active when audio context is unlocked
+ */
+function ensureLogoAnimation() {
+  if (!logoPulseLoop && logoDots.length) {
+    setupLogoPulse();
+  }
+
+  if (Tone.Transport.state !== 'started') {
+    Tone.Transport.start();
+  }
 }
 
 /**
@@ -249,6 +279,7 @@ async function handleMusicalParameters(data) {
 
     // Set tempo
     Tone.Transport.bpm.value = params.tempo;
+    ensureLogoAnimation();
 
     // Get scale notes or use default
     const notes = params.scale || ['C4', 'E4', 'G4', 'B4'];
@@ -268,26 +299,30 @@ async function handleMusicalParameters(data) {
 
     // Schedule the pattern
     let currentTime = 0;
+    const scheduledEvents = [];
     const eighthNoteDuration = (60 / params.tempo) / 2; // Duration of eighth note in seconds
 
     notePattern.forEach((note, i) => {
-      Tone.Transport.schedule((time) => {
+      const eventId = Tone.Transport.schedule((time) => {
         instrument.triggerAttackRelease(note, noteDurations[i], time, noteVelocities[i]);
-      }, currentTime);
+      }, `+${currentTime}`);
+      scheduledEvents.push(eventId);
       currentTime += eighthNoteDuration;
     });
 
-    // Start playback
-    Tone.Transport.start();
+    if (Tone.Transport.state !== 'started') {
+      Tone.Transport.start();
+    }
     addLog(`Playing ${params.instrumentType} at ${params.tempo} BPM...`, 'success');
 
-    // Stop after duration and clean up
-    setTimeout(() => {
-      Tone.Transport.stop();
-      Tone.Transport.cancel();
+    Tone.Transport.scheduleOnce((time) => {
+      scheduledEvents.forEach((id) => Tone.Transport.clear(id));
       instrument.dispose();
-      addLog('Playback complete', 'success');
-    }, duration * 1000);
+      Tone.Draw.schedule(() => {
+        addLog('Playback complete', 'success');
+      }, time);
+      scheduledEvents.length = 0;
+    }, `+${Math.max(duration, currentTime)}`);
 
     audioCount++;
     audioCountEl.textContent = audioCount;
@@ -355,3 +390,86 @@ async function triggerTestAudio() {
 
 // Initialize
 addLog('Client ready. Enter repository and connect to stream.');
+
+/**
+ * Load the bots-n-cats logo SVG and prepare it for animation
+ */
+async function loadLogo() {
+  if (!logoContainer) return;
+
+  try {
+    const response = await fetch('logo.svg');
+    const svgMarkup = await response.text();
+    logoContainer.innerHTML = svgMarkup;
+
+    const svgElement = logoContainer.querySelector('svg');
+    if (svgElement) {
+      svgElement.setAttribute('role', 'presentation');
+      svgElement.setAttribute('focusable', 'false');
+    }
+
+    logoDots = Array.from(logoContainer.querySelectorAll('path'));
+    logoDots.forEach((dot) => {
+      dot.classList.add('logo-dot');
+    });
+
+    if (audioContext) {
+      ensureLogoAnimation();
+    }
+  } catch (error) {
+    console.error('Failed to load logo.svg', error);
+  }
+}
+
+/**
+ * Set up a Tone.js loop to pulse logo dots in sync with the transport
+ */
+function setupLogoPulse() {
+  if (!logoDots.length || logoPulseLoop) {
+    return;
+  }
+
+  logoPulseLoop = new Tone.Loop((time) => {
+    const pattern = accentPattern[logoBeatIndex % accentPattern.length];
+    const totalDots = logoDots.length;
+    const baseGroupSize = Math.max(6, Math.floor(totalDots / 90));
+    const startIndex = Math.floor(
+      (logoBeatIndex * baseGroupSize + pattern.offset * baseGroupSize) % totalDots
+    );
+    const groupSize = Math.max(4, Math.round(baseGroupSize * pattern.width));
+    const indices = [];
+
+    for (let i = 0; i < groupSize; i++) {
+      indices.push((startIndex + i) % totalDots);
+    }
+
+    Tone.Draw.schedule(() => {
+      highlightLogoDots(indices, pattern.accent);
+    }, time);
+
+    logoBeatIndex++;
+  }, '8n');
+
+  logoPulseLoop.start(0);
+}
+
+/**
+ * Highlight a set of logo dots for the current beat
+ */
+function highlightLogoDots(indices, isAccent) {
+  activeLogoDots.forEach((dot) => {
+    dot.classList.remove('pulse');
+    dot.classList.remove('accent');
+  });
+
+  activeLogoDots = indices
+    .map((index) => logoDots[index])
+    .filter(Boolean);
+
+  activeLogoDots.forEach((dot) => {
+    dot.classList.add('pulse');
+    if (isAccent) {
+      dot.classList.add('accent');
+    }
+  });
+}

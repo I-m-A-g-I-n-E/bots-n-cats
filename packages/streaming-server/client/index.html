@@ -32,6 +32,44 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     }
 
+    .logo-wrapper {
+      width: 100%;
+      margin: 0 auto 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0f172a;
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .logo-wrapper svg {
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+    }
+
+    .logo-dot {
+      fill: #0f172a;
+      opacity: 0.75;
+      transition: transform 0.18s ease, fill 0.18s ease, opacity 0.18s ease;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .logo-dot.pulse {
+      fill: #8b5cf6;
+      opacity: 1;
+      transform: scale(1.22);
+    }
+
+    .logo-dot.pulse.accent {
+      fill: #facc15;
+      filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.45));
+      transform: scale(1.3);
+    }
+
     h1 {
       font-size: 2rem;
       margin-bottom: 0.5rem;
@@ -187,6 +225,7 @@
 </head>
 <body>
   <div class="container">
+    <div class="logo-wrapper" id="logoContainer" aria-hidden="true"></div>
     <h1>🐱 bots-n-cats</h1>
     <p class="subtitle">Live Soundtrack Stream</p>
 
