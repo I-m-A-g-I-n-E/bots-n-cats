@@ -2,8 +2,16 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": false
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "references": [
+    {
+      "path": "../audio-core"
+    }
+  ]
 }
