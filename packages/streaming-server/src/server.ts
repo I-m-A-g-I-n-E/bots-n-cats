@@ -6,7 +6,7 @@
 
 import express, { Express } from 'express';
 import cors from 'cors';
-import { AudioEventBus, MultiClientAudioManager } from '@bots-n-cats/audio-core';
+import { AudioEventBus, ClientSessionManager, MultiClientAudioManager } from '@bots-n-cats/audio-core';
 import { StreamingService } from './services/StreamingService';
 import { OfflineRenderer } from './services/OfflineRenderer';
 import { SSEManager } from './services/SSEManager';
@@ -32,7 +32,8 @@ export function createStreamingServer(config: ServerConfig = {}) {
 
   // Initialize services
   const eventBus = new AudioEventBus();
-  const multiClientManager = new MultiClientAudioManager();
+  const sessionManager = new ClientSessionManager(eventBus);
+  const multiClientManager = new MultiClientAudioManager(sessionManager, eventBus);
   const offlineRenderer = new OfflineRenderer();
   const sseManager = new SSEManager();
 

@@ -5,6 +5,7 @@
  * BOC-13: Real-time streaming system
  */
 
+import * as Tone from 'tone';
 import { AudioEventBus, MultiClientAudioManager } from '@bots-n-cats/audio-core';
 import { OfflineRenderer } from './OfflineRenderer';
 import { SSEManager } from './SSEManager';
@@ -64,13 +65,22 @@ export class StreamingService {
       console.log(`[StreamingService] Processing music for repo ${repoId}`);
 
       // 1. Render composition offline
-      const audioBuffer = await this.offlineRenderer.render(musicalParams);
+      const webAudioBuffer = await this.offlineRenderer.render(musicalParams);
 
-      // 2. Broadcast to all clients watching this repo via MultiClientAudioManager
+      // 2. Wrap in ToneAudioBuffer for audio-core compatibility
+      const toneBuffer = new Tone.ToneAudioBuffer(webAudioBuffer);
+      const audioBuffer = {
+        buffer: toneBuffer,
+        duration: toneBuffer.duration,
+        sampleRate: toneBuffer.sampleRate,
+        timestamp: Date.now(),
+      };
+
+      // 3. Broadcast to all clients watching this repo via MultiClientAudioManager
       await this.multiClientManager.broadcastBuffer(repoId, audioBuffer);
 
-      // 3. Serialize buffer for network transmission
-      const serializedBuffer = BufferSerializer.serialize(audioBuffer);
+      // 4. Serialize buffer for network transmission
+      const serializedBuffer = BufferSerializer.serialize(webAudioBuffer);
 
       // 4. Send via SSE to all connected clients
       const message: Omit<AudioBufferMessage, 'timestamp'> = {
@@ -109,9 +119,11 @@ export class StreamingService {
 
   /**
    * Update client activity (heartbeat)
+   * Note: Activity tracking is handled internally by ClientSessionManager
    */
   updateClientActivity(clientId: string): void {
-    this.multiClientManager.updateClientActivity(clientId);
+    // Activity is tracked automatically by ClientSessionManager
+    console.log(`[StreamingService] Heartbeat received from client ${clientId}`);
   }
 
   /**
