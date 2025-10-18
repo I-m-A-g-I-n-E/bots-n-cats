@@ -174,6 +174,10 @@ async function handleMessage(message) {
       await handleAudioBuffer(message.data);
       break;
 
+    case 'musical_parameters':
+      await handleMusicalParameters(message.data);
+      break;
+
     case 'heartbeat':
       heartbeatCount++;
       heartbeatCountEl.textContent = heartbeatCount;
@@ -215,6 +219,81 @@ async function handleAudioBuffer(data) {
   } catch (error) {
     console.error('Error playing audio:', error);
     addLog('Error playing audio: ' + error.message, 'error');
+  }
+}
+
+/**
+ * Handle musical parameters message (client-side rendering)
+ */
+async function handleMusicalParameters(data) {
+  try {
+    const { params, repoId } = data;
+    addLog(`Received musical parameters: ${params.tempo} BPM, ${params.instrumentType}, ${params.duration}s`, 'info');
+
+    // Create instrument based on parameters
+    let instrument;
+    switch (params.instrumentType) {
+      case 'fmSynth':
+        instrument = new Tone.FMSynth().toDestination();
+        break;
+      case 'polySynth':
+        instrument = new Tone.PolySynth(Tone.Synth).toDestination();
+        break;
+      case 'sampler':
+        // Fallback to synth for sampler (would need actual samples)
+        instrument = new Tone.Synth().toDestination();
+        break;
+      default:
+        instrument = new Tone.Synth().toDestination();
+    }
+
+    // Set tempo
+    Tone.Transport.bpm.value = params.tempo;
+
+    // Get scale notes or use default
+    const notes = params.scale || ['C4', 'E4', 'G4', 'B4'];
+    const duration = params.duration || 5;
+
+    // Create a simple pattern from the scale
+    const notePattern = [];
+    const noteDurations = [];
+    const noteVelocities = [];
+
+    // Generate a melodic sequence using the scale
+    for (let i = 0; i < 8; i++) {
+      notePattern.push(notes[i % notes.length]);
+      noteDurations.push('8n'); // Eighth notes
+      noteVelocities.push(0.5 + Math.random() * 0.3); // Random velocity 0.5-0.8
+    }
+
+    // Schedule the pattern
+    let currentTime = 0;
+    const eighthNoteDuration = (60 / params.tempo) / 2; // Duration of eighth note in seconds
+
+    notePattern.forEach((note, i) => {
+      Tone.Transport.schedule((time) => {
+        instrument.triggerAttackRelease(note, noteDurations[i], time, noteVelocities[i]);
+      }, currentTime);
+      currentTime += eighthNoteDuration;
+    });
+
+    // Start playback
+    Tone.Transport.start();
+    addLog(`Playing ${params.instrumentType} at ${params.tempo} BPM...`, 'success');
+
+    // Stop after duration and clean up
+    setTimeout(() => {
+      Tone.Transport.stop();
+      Tone.Transport.cancel();
+      instrument.dispose();
+      addLog('Playback complete', 'success');
+    }, duration * 1000);
+
+    audioCount++;
+    audioCountEl.textContent = audioCount;
+  } catch (error) {
+    console.error('Error rendering audio:', error);
+    addLog('Error rendering audio: ' + error.message, 'error');
   }
 }
 

@@ -56,6 +56,7 @@ export interface SSEClient {
 export type SSEMessageType =
   | 'connected'
   | 'audio_buffer'
+  | 'musical_parameters'
   | 'heartbeat'
   | 'error'
   | 'disconnected';
@@ -89,6 +90,17 @@ export interface ConnectionMessage extends SSEMessage {
   data: {
     message: string;
     clientId: string;
+    repoId: string;
+  };
+}
+
+/**
+ * Musical parameters message (client-side rendering)
+ */
+export interface MusicalParametersMessage extends SSEMessage {
+  type: 'musical_parameters';
+  data: {
+    params: MusicalParameters;
     repoId: string;
   };
 }
