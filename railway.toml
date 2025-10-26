@@ -1,6 +1,8 @@
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
+# Ignore markdown and doc files to prevent rebuilds on documentation changes
+watchPaths = ["packages/**/*.ts", "packages/**/*.js", "packages/**/*.json", "integrated-server.ts", "Dockerfile", "package.json", "package-lock.json", "tsconfig*.json"]
 
 [deploy]
 startCommand = "tsx integrated-server.ts"
