@@ -96,7 +96,7 @@ export class EventParser {
    */
   private static parsePullRequest(payload: PullRequestEventPayload): NormalizedEvent {
     const pr = payload.pull_request;
-    const changeSize = pr.additions + pr.deletions;
+    const changeSize = (pr.additions || 0) + (pr.deletions || 0);
 
     // Determine emotion based on PR state and action
     let emotion: EmotionCategory;
@@ -116,18 +116,18 @@ export class EventParser {
       emotion,
       intensity: Math.min(1.0, 0.5 + (changeSize * 0.0001)), // Base 0.5, scales with changes
       metadata: {
-        number: pr.number,
-        title: pr.title,
-        state: pr.state,
-        merged: pr.merged,
-        draft: pr.draft,
-        additions: pr.additions,
-        deletions: pr.deletions,
-        changedFiles: pr.changed_files,
+        number: pr.number || 0,
+        title: pr.title || 'Untitled',
+        state: pr.state || 'open',
+        merged: pr.merged || false,
+        draft: pr.draft || false,
+        additions: pr.additions || 0,
+        deletions: pr.deletions || 0,
+        changedFiles: pr.changed_files || 0,
         changeSize,
-        repository: payload.repository.full_name,
-        author: pr.user.login,
-        sender: payload.sender.login,
+        repository: payload.repository?.full_name || 'unknown',
+        author: pr.user?.login || 'unknown',
+        sender: payload.sender?.login || 'unknown',
       },
       timestamp: Date.now(),
     };
@@ -155,11 +155,11 @@ export class EventParser {
       emotion,
       intensity: review.state === 'approved' ? 0.8 : review.state === 'changes_requested' ? 0.6 : 0.4,
       metadata: {
-        reviewState: review.state,
-        prNumber: payload.pull_request.number,
-        prTitle: payload.pull_request.title,
-        reviewer: review.user.login,
-        repository: payload.repository.full_name,
+        reviewState: review.state || 'commented',
+        prNumber: payload.pull_request?.number || 0,
+        prTitle: payload.pull_request?.title || 'Untitled',
+        reviewer: review.user?.login || 'unknown',
+        repository: payload.repository?.full_name || 'unknown',
       },
       timestamp: Date.now(),
     };
@@ -191,10 +191,10 @@ export class EventParser {
       emotion,
       intensity,
       metadata: {
-        checkName: check.name,
-        status: check.status,
-        conclusion: check.conclusion,
-        repository: payload.repository.full_name,
+        checkName: check.name || 'Unknown Check',
+        status: check.status || 'unknown',
+        conclusion: check.conclusion || null,
+        repository: payload.repository?.full_name || 'unknown',
       },
       timestamp: Date.now(),
     };
@@ -205,6 +205,23 @@ export class EventParser {
    */
   private static parseDeploymentStatus(payload: DeploymentStatusEventPayload): NormalizedEvent {
     const status = payload.deployment_status;
+
+    // Handle missing deployment_status object
+    if (!status) {
+      return {
+        eventType: 'deployment_status',
+        action: 'unknown',
+        emotion: 'activity',
+        intensity: 0.5,
+        metadata: {
+          environment: 'unknown',
+          state: 'unknown',
+          description: 'Missing deployment status data',
+          repository: payload.repository?.full_name || 'unknown',
+        },
+        timestamp: Date.now(),
+      };
+    }
 
     // Map deployment state to emotion
     let emotion: EmotionCategory;
@@ -218,14 +235,14 @@ export class EventParser {
 
     return {
       eventType: 'deployment_status',
-      action: status.state,
+      action: status.state || 'unknown',
       emotion,
       intensity: status.state === 'success' ? 1.0 : status.state === 'failure' ? 0.8 : 0.5,
       metadata: {
-        environment: status.environment,
-        state: status.state,
-        description: status.description,
-        repository: payload.repository.full_name,
+        environment: status.environment || 'unknown',
+        state: status.state || 'unknown',
+        description: status.description || '',
+        repository: payload.repository?.full_name || 'unknown',
       },
       timestamp: Date.now(),
     };
@@ -253,11 +270,11 @@ export class EventParser {
       emotion,
       intensity: payload.action === 'closed' ? 0.7 : 0.5,
       metadata: {
-        issueNumber: issue.number,
-        title: issue.title,
-        state: issue.state,
-        repository: payload.repository.full_name,
-        user: issue.user.login,
+        issueNumber: issue.number || 0,
+        title: issue.title || 'Untitled',
+        state: issue.state || 'open',
+        repository: payload.repository?.full_name || 'unknown',
+        user: issue.user?.login || 'unknown',
       },
       timestamp: Date.now(),
     };
@@ -273,10 +290,10 @@ export class EventParser {
       emotion: 'activity', // Comments are general activity
       intensity: 0.4,
       metadata: {
-        issueNumber: payload.issue.number,
-        issueTitle: payload.issue.title,
-        commentAuthor: payload.comment.user.login,
-        repository: payload.repository.full_name,
+        issueNumber: payload.issue?.number || 0,
+        issueTitle: payload.issue?.title || 'Untitled',
+        commentAuthor: payload.comment?.user?.login || 'unknown',
+        repository: payload.repository?.full_name || 'unknown',
       },
       timestamp: Date.now(),
     };
@@ -307,10 +324,10 @@ export class EventParser {
       emotion,
       intensity,
       metadata: {
-        workflowName: workflow.name,
-        status: workflow.status,
-        conclusion: workflow.conclusion,
-        repository: payload.repository.full_name,
+        workflowName: workflow.name || 'Unknown Workflow',
+        status: workflow.status || 'unknown',
+        conclusion: workflow.conclusion || null,
+        repository: payload.repository?.full_name || 'unknown',
       },
       timestamp: Date.now(),
     };
