@@ -57,6 +57,14 @@ export function createWebhookRouter(webhookService: WebhookService): Router {
       const rawPayload = req.rawBody || JSON.stringify(req.body);
       const payload = req.body as WebhookPayload;
 
+      // DEBUG: Log repository structure to diagnose 'unknown' issue
+      console.log('[DEBUG] Webhook repository object:', JSON.stringify({
+        repository: payload.repository,
+        repositoryFullName: payload.repository?.full_name,
+        repositoryName: payload.repository?.name,
+        repositoryOwner: payload.repository?.owner,
+      }, null, 2));
+
       // Log incoming webhook
       Logger.webhook(eventType, payload.action || 'unknown', {
         deliveryId,
