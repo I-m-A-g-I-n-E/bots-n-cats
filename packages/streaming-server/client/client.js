@@ -10,6 +10,16 @@ let audioContext = null;
 let audioCount = 0;
 let heartbeatCount = 0;
 let clientId = generateClientId();
+let reconnectAttempts = 0;
+let reconnectTimer = null;
+const MAX_RECONNECT_ATTEMPTS = 6;
+const RECONNECT_DELAY = 30000; // 30 seconds
+
+// LocalStorage keys
+const STORAGE_KEYS = {
+  REPO_ID: 'botsncats_repoId',
+  SERVER_URL: 'botsncats_serverUrl',
+};
 
 // DOM Elements
 const statusEl = document.getElementById('status');
@@ -27,11 +37,66 @@ connectBtn.addEventListener('click', connect);
 disconnectBtn.addEventListener('click', disconnect);
 testAudioBtn.addEventListener('click', triggerTestAudio);
 
+// Save to localStorage when inputs change
+repoIdInput.addEventListener('change', () => {
+  localStorage.setItem(STORAGE_KEYS.REPO_ID, repoIdInput.value.trim());
+});
+serverUrlInput.addEventListener('change', () => {
+  localStorage.setItem(STORAGE_KEYS.SERVER_URL, serverUrlInput.value.trim());
+});
+
+/**
+ * Load saved values from localStorage
+ */
+function loadFromStorage() {
+  const savedRepoId = localStorage.getItem(STORAGE_KEYS.REPO_ID);
+  const savedServerUrl = localStorage.getItem(STORAGE_KEYS.SERVER_URL);
+
+  if (savedRepoId) {
+    repoIdInput.value = savedRepoId;
+  }
+  if (savedServerUrl) {
+    serverUrlInput.value = savedServerUrl;
+  }
+}
+
 /**
  * Generate a unique client ID
  */
 function generateClientId() {
   return 'client_' + Math.random().toString(36).substring(2, 15);
+}
+
+/**
+ * Attempt to reconnect after disconnection
+ */
+function scheduleReconnect() {
+  if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+    addLog(`Max reconnection attempts (${MAX_RECONNECT_ATTEMPTS}) reached. Please reconnect manually.`, 'error');
+    return;
+  }
+
+  reconnectAttempts++;
+  const delay = RECONNECT_DELAY / 1000; // Convert to seconds for display
+
+  addLog(`Reconnecting in ${delay}s (attempt ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})...`, 'info');
+  setStatus('connecting', `Reconnecting in ${delay}s...`);
+
+  reconnectTimer = setTimeout(() => {
+    addLog(`Reconnect attempt ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS}...`, 'info');
+    connect();
+  }, RECONNECT_DELAY);
+}
+
+/**
+ * Cancel pending reconnection
+ */
+function cancelReconnect() {
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
+  reconnectAttempts = 0;
 }
 
 /**
@@ -82,6 +147,10 @@ async function connect() {
   }
 
   try {
+    // Save to localStorage
+    localStorage.setItem(STORAGE_KEYS.REPO_ID, repoId);
+    localStorage.setItem(STORAGE_KEYS.SERVER_URL, serverUrl);
+
     // Initialize Tone.js audio context
     if (!audioContext) {
       await Tone.start();
@@ -93,6 +162,9 @@ async function connect() {
     if (eventSource) {
       eventSource.close();
     }
+
+    // Cancel any pending reconnects
+    cancelReconnect();
 
     setStatus('connecting', 'Connecting...');
     addLog(`Connecting to ${serverUrl}/stream/${repoId}...`);
@@ -126,7 +198,7 @@ async function connect() {
     eventSource.addEventListener('error', (error) => {
       console.error('SSE Error:', error);
       setStatus('disconnected', 'Connection lost');
-      addLog('Connection error', 'error');
+      addLog('Server disconnected', 'error');
       connectBtn.disabled = false;
       disconnectBtn.disabled = true;
       testAudioBtn.disabled = true;
@@ -135,6 +207,9 @@ async function connect() {
         eventSource.close();
         eventSource = null;
       }
+
+      // Attempt auto-reconnect
+      scheduleReconnect();
     });
   } catch (error) {
     console.error('Connection error:', error);
@@ -147,6 +222,9 @@ async function connect() {
  * Disconnect from SSE stream
  */
 function disconnect() {
+  // Cancel any pending reconnects
+  cancelReconnect();
+
   if (eventSource) {
     eventSource.close();
     eventSource = null;
@@ -353,5 +431,6 @@ async function triggerTestAudio() {
   }
 }
 
-// Initialize
+// Initialize - load saved values from localStorage
+loadFromStorage();
 addLog('Client ready. Enter repository and connect to stream.');
