@@ -177,12 +177,6 @@ async function connect() {
     return;
   }
 
-  // Validate repository format
-  if (!validateRepoId()) {
-    alert('Invalid repository format. Use: owner/repo (e.g., facebook/react)');
-    return;
-  }
-
   if (!serverUrl) {
     alert('Please enter a server URL');
     return;
