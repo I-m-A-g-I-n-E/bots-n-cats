@@ -26,8 +26,17 @@ RUN npm ci
 COPY packages ./packages
 COPY integrated-server.ts ./
 
-# Build all packages
-RUN npm run build
+# Build packages in dependency order
+# 1. Build audio-core first (base dependency)
+RUN npm run build --workspace=packages/audio-core
+
+# 2. Build music-engine (depends on audio-core)
+RUN npm run build --workspace=packages/music-engine
+
+# 3. Build remaining packages (depend on audio-core)
+RUN npm run build --workspace=packages/cat-sounds
+RUN npm run build --workspace=packages/webhook-server
+RUN npm run build --workspace=packages/streaming-server
 
 # Production stage
 FROM node:18-alpine
