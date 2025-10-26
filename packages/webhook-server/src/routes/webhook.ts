@@ -41,7 +41,11 @@ export function createWebhookRouter(webhookService: WebhookService): Router {
         });
       }
 
-      if (!signature) {
+      // TEMPORARY: Allow webhooks without signature for testing
+      // TODO: Remove this after fixing GitHub App webhook secret
+      const skipValidation = process.env.SKIP_SIGNATURE_VALIDATION === 'true';
+
+      if (!signature && !skipValidation) {
         Logger.warn('Missing x-hub-signature-256 header');
         return res.status(401).json({
           error: 'Unauthorized',

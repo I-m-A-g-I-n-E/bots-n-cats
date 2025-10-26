@@ -38,8 +38,13 @@ export class WebhookService {
     rawPayload: string | Buffer,
     payload: WebhookPayload
   ): Promise<void> {
-    // Step 1: Validate signature
-    SignatureValidator.validate(rawPayload, signature, this.webhookSecret);
+    // Step 1: Validate signature (skip if SKIP_SIGNATURE_VALIDATION=true)
+    const skipValidation = process.env.SKIP_SIGNATURE_VALIDATION === 'true';
+    if (!skipValidation) {
+      SignatureValidator.validate(rawPayload, signature, this.webhookSecret);
+    } else {
+      console.log('[WebhookService] ⚠️  Signature validation SKIPPED (testing mode)');
+    }
 
     // Step 2: Parse GitHub event to NormalizedEvent
     const normalizedEvent = EventParser.parse(eventType, payload);
