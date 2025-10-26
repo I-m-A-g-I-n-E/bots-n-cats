@@ -95,6 +95,21 @@
       border-color: #667eea;
     }
 
+    input.error {
+      border-color: #e74c3c;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
     button {
       width: 100%;
       padding: 1rem;
@@ -200,6 +215,7 @@
         placeholder="e.g., facebook/react"
         value="owner/repo-name"
       >
+      <div id="repoIdError" class="error-message">Invalid format. Use: owner/repo (e.g., facebook/react)</div>
     </div>
 
     <div class="input-group">

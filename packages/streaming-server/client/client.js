@@ -24,6 +24,7 @@ const STORAGE_KEYS = {
 // DOM Elements
 const statusEl = document.getElementById('status');
 const repoIdInput = document.getElementById('repoId');
+const repoIdError = document.getElementById('repoIdError');
 const serverUrlInput = document.getElementById('serverUrl');
 const connectBtn = document.getElementById('connectBtn');
 const disconnectBtn = document.getElementById('disconnectBtn');
@@ -32,10 +33,15 @@ const logEl = document.getElementById('log');
 const audioCountEl = document.getElementById('audioCount');
 const heartbeatCountEl = document.getElementById('heartbeatCount');
 
+// Validation
+const REPO_FORMAT_REGEX = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/;
+
 // Event Handlers
 connectBtn.addEventListener('click', connect);
 disconnectBtn.addEventListener('click', disconnect);
 testAudioBtn.addEventListener('click', triggerTestAudio);
+repoIdInput.addEventListener('blur', validateRepoId);
+repoIdInput.addEventListener('input', validateRepoId);
 
 // Save to localStorage when inputs change
 repoIdInput.addEventListener('change', () => {
@@ -44,6 +50,36 @@ repoIdInput.addEventListener('change', () => {
 serverUrlInput.addEventListener('change', () => {
   localStorage.setItem(STORAGE_KEYS.SERVER_URL, serverUrlInput.value.trim());
 });
+
+/**
+ * Validate repository ID format
+ */
+function validateRepoId() {
+  const repoId = repoIdInput.value.trim();
+  
+  // Empty is valid (will be caught by connect function)
+  if (!repoId) {
+    repoIdInput.classList.remove('error');
+    repoIdError.classList.remove('show');
+    connectBtn.disabled = false;
+    return true;
+  }
+  
+  // Check format
+  const isValid = REPO_FORMAT_REGEX.test(repoId);
+  
+  if (isValid) {
+    repoIdInput.classList.remove('error');
+    repoIdError.classList.remove('show');
+    connectBtn.disabled = false;
+    return true;
+  } else {
+    repoIdInput.classList.add('error');
+    repoIdError.classList.add('show');
+    connectBtn.disabled = true;
+    return false;
+  }
+}
 
 /**
  * Load saved values from localStorage
@@ -138,6 +174,12 @@ async function connect() {
 
   if (!repoId) {
     alert('Please enter a repository ID');
+    return;
+  }
+
+  // Validate repository format
+  if (!validateRepoId()) {
+    alert('Invalid repository format. Use: owner/repo (e.g., facebook/react)');
     return;
   }
 
@@ -433,4 +475,5 @@ async function triggerTestAudio() {
 
 // Initialize - load saved values from localStorage
 loadFromStorage();
+validateRepoId(); // Validate on page load
 addLog('Client ready. Enter repository and connect to stream.');
