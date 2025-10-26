@@ -25,9 +25,8 @@ import { createWebhookRouter } from './packages/webhook-server/src/routes/webhoo
 import { StreamingService } from './packages/streaming-server/src/services/StreamingService.js';
 import { OfflineRenderer } from './packages/streaming-server/src/services/OfflineRenderer.js';
 import { SSEManager } from './packages/streaming-server/src/services/SSEManager.js';
-import { createStreamRouter } from './packages/streaming-server/src/routes/stream.js';
-import { createHealthRouter } from './packages/streaming-server/src/routes/health.js';
 import { Logger } from './packages/webhook-server/src/utils/logger.js';
+import { v4 as uuidv4 } from 'uuid';
 
 // Load environment variables
 dotenv.config();
@@ -167,9 +166,43 @@ async function main() {
     );
     Logger.info('✅ StreamingService initialized');
 
-    // Add streaming routes to webhook server
-    webhookApp.use('/stream', createStreamRouter(streamingService, sseManager));
-    webhookApp.use('/health', createHealthRouter(streamingService, sseManager));
+    // Add streaming routes inline (bypass import issues)
+    // GET /stream/:repoId - SSE connection
+    webhookApp.get('/stream/:repoId', (req, res) => {
+      const { repoId } = req.params;
+      const clientId = (req.query.clientId as string) || uuidv4();
+
+      console.log(`[StreamRouter] New connection request for repo ${repoId}, client ${clientId}`);
+
+      try {
+        streamingService.createClientSession(clientId, repoId);
+        sseManager.connect(clientId, repoId, res);
+        console.log(`[StreamRouter] Client ${clientId} connected to repo ${repoId}`);
+      } catch (error) {
+        console.error(`[StreamRouter] Error connecting client ${clientId}:`, error);
+        res.status(500).json({ error: 'Failed to establish connection' });
+      }
+    });
+
+    // POST /stream/:repoId/test - Test audio generation
+    webhookApp.post('/stream/:repoId/test', async (req, res) => {
+      const { repoId } = req.params;
+      console.log(`[StreamRouter] Test audio requested for repo ${repoId}`);
+
+      try {
+        await streamingService.generateTestAudio(repoId, req.body);
+        res.json({ status: 'success', message: 'Test audio generated' });
+      } catch (error) {
+        console.error(`[StreamRouter] Test audio error:`, error);
+        res.status(500).json({ error: 'Failed to generate test audio' });
+      }
+    });
+
+    // GET /health/repo/:repoId - Repo-specific health
+    webhookApp.get('/health/repo/:repoId', (req, res) => {
+      const metrics = streamingService.getHealthMetrics();
+      res.json(metrics);
+    });
 
     // Serve streaming client static files
     webhookApp.use(express.static('packages/streaming-server/client'));
