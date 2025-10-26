@@ -2,7 +2,21 @@
 
 **Where your code purrs and your deploys meow!**
 
+✅ **LIVE ON RAILWAY:** [https://bots-n-cats-production.up.railway.app](https://bots-n-cats-production.up.railway.app)
+
 Transform your GitHub repository activity into a live, ambient musical soundtrack with cat sounds woven in as actual musical instruments. Every commit, PR, deployment, and CI run contributes to an evolving composition that you can stream in real-time.
+
+## 🎉 Status: **MUSIC IS PLAYING!** (2025-10-26)
+
+**End-to-end flow confirmed working:**
+- ✅ GitHub webhooks received and validated
+- ✅ Events parsed and mapped to musical parameters
+- ✅ Music generated (tempo, scale, instrument selection)
+- ✅ Real-time streaming via Server-Sent Events (SSE)
+- ✅ Browser playback with Tone.js
+- ✅ Test webhook script for instant testing
+
+**Try it now:** Open the [live dashboard](https://bots-n-cats-production.up.railway.app), connect to repo `I-m-A-g-I-n-E/bots-n-cats`, and push a commit to hear your code sing!
 
 ## 🎵 What It Does
 
@@ -25,16 +39,32 @@ bots-n-cats creates a **living soundtrack** for your development workflow:
 
 ## 🚀 Quick Start
 
-### 1. Clone and Install
+### Option A: Use the Live Deployment (Easiest!)
+
+1. **Open the dashboard:** [https://bots-n-cats-production.up.railway.app](https://bots-n-cats-production.up.railway.app)
+2. **Enter your repo:** Format: `owner/repo` (e.g., `I-m-A-g-I-n-E/bots-n-cats`)
+3. **Connect to stream:** Click "Connect to Stream"
+4. **Trigger webhook:** Push a commit or use the test script:
 
 ```bash
-git clone <your-repo-url>
+# Clone the repo to get the test script
+git clone https://github.com/I-m-A-g-I-n-E/bots-n-cats.git
+cd bots-n-cats
+./test-webhook.sh  # Sends instant test webhook without requiring a commit!
+```
+
+### Option B: Local Development
+
+#### 1. Clone and Install
+
+```bash
+git clone https://github.com/I-m-A-g-I-n-E/bots-n-cats.git
 cd bots-n-cats
 npm install
 npm run build
 ```
 
-### 2. Configure Environment Variables
+#### 2. Configure Environment Variables
 
 Create environment files for each server:
 
@@ -400,7 +430,3 @@ Then make a commit to your repo and watch the music evolve! 🎵🐱
 ---
 
 🤖 Built with [Claude Code](https://claude.com/claude-code)
-# Test music generation
-# Test music generation
-# Test music generation
-# Test music generation
