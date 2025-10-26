@@ -85,7 +85,8 @@ async function main() {
       process.exit(1);
     }
 
-    const webhookPort = parseInt(process.env.WEBHOOK_PORT || '3000', 10);
+    // Railway provides PORT variable - use it for webhook server if available
+    const webhookPort = parseInt(process.env.PORT || process.env.WEBHOOK_PORT || '3000', 10);
     const streamingPort = parseInt(process.env.STREAMING_PORT || '3001', 10);
 
     // ============================================================
