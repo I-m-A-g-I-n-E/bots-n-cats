@@ -6,12 +6,17 @@
 
 import express, { Express } from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { AudioEventBus, ClientSessionManager, MultiClientAudioManager } from '@bots-n-cats/audio-core';
 import { StreamingService } from './services/StreamingService.js';
 import { OfflineRenderer } from './services/OfflineRenderer.js';
 import { SSEManager } from './services/SSEManager.js';
 import { createStreamRouter } from './routes/stream.js';
 import { createHealthRouter } from './routes/health.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export interface ServerConfig {
   port?: number;
@@ -29,6 +34,10 @@ export function createStreamingServer(config: ServerConfig = {}) {
   }));
   app.use(express.json());
   app.use(express.static('client')); // Serve static client files
+
+  app.get('/logo.svg', (_req, res) => {
+    res.sendFile(path.resolve(__dirname, '../logo.svg'));
+  });
 
   // Initialize services
   const eventBus = new AudioEventBus();
