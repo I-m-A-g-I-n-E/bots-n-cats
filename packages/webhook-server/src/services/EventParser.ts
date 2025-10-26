@@ -74,17 +74,17 @@ export class EventParser {
       emotion,
       intensity: Math.min(1.0, (commitCount * 0.1) + (totalChanges * 0.01)),
       metadata: {
-        ref: payload.ref,
-        branch: payload.ref.replace('refs/heads/', ''),
+        ref: payload.ref || 'unknown',
+        branch: payload.ref ? payload.ref.replace('refs/heads/', '') : 'unknown',
         commitCount,
         totalChanges,
-        forced: payload.forced,
-        repository: payload.repository.full_name,
-        sender: payload.sender.login,
+        forced: payload.forced || false,
+        repository: payload.repository?.full_name || 'unknown',
+        sender: payload.sender?.login || 'unknown',
         commits: payload.commits?.map(c => ({
-          id: c.id.substring(0, 7),
-          message: c.message.split('\n')[0], // First line only
-          author: c.author.username || c.author.name,
+          id: c.id?.substring(0, 7) || 'unknown',
+          message: c.message?.split('\n')[0] || 'No message', // First line only
+          author: c.author?.username || c.author?.name || 'unknown',
         })),
       },
       timestamp: Date.now(),
