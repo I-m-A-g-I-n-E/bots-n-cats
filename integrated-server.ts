@@ -86,8 +86,8 @@ async function main() {
     }
 
     // Railway provides PORT variable - use it for webhook server if available
+    // All services (webhook, streaming, dashboard) now run on one port for Railway compatibility
     const webhookPort = parseInt(process.env.PORT || process.env.WEBHOOK_PORT || '3000', 10);
-    const streamingPort = parseInt(process.env.STREAMING_PORT || '3001', 10);
 
     // ============================================================
     // SHARED EVENT BUS (Critical for integration!)
@@ -149,21 +149,9 @@ async function main() {
       res.json(musicalState);
     });
 
-    // Start webhook server
-    const webhookServer = webhookApp.listen(webhookPort, () => {
-      Logger.info(`🎸 Webhook server listening on port ${webhookPort}`);
-      Logger.info(`📊 Dashboard available at http://localhost:${webhookPort}/dashboard`);
-    });
-
     // ============================================================
-    // STREAMING SERVER (Port 3001)
+    // STREAMING SERVICES & ROUTES (Merged into webhook server)
     // ============================================================
-    const streamingApp = express();
-
-    // Middleware
-    streamingApp.use(cors({ origin: '*', credentials: true }));
-    streamingApp.use(express.json());
-    streamingApp.use(express.static('packages/streaming-server/client'));
 
     // Initialize streaming services (using same eventBus!)
     const sessionManager = new ClientSessionManager(eventBus);
@@ -179,35 +167,18 @@ async function main() {
     );
     Logger.info('✅ StreamingService initialized');
 
-    // Routes
-    streamingApp.use('/stream', createStreamRouter(streamingService, sseManager));
-    streamingApp.use('/health', createHealthRouter(streamingService, sseManager));
+    // Add streaming routes to webhook server
+    webhookApp.use('/stream', createStreamRouter(streamingService, sseManager));
+    webhookApp.use('/health', createHealthRouter(streamingService, sseManager));
 
-    streamingApp.get('/', (req, res) => {
-      res.json({
-        name: 'bots-n-cats Streaming Server',
-        version: '1.0.0',
-        description: 'Real-time audio streaming via SSE',
-        endpoints: {
-          stream: '/stream/:repoId - Connect to SSE stream',
-          testAudio: 'POST /stream/:repoId/test - Generate test audio',
-          health: '/health - Server health metrics',
-        },
-      });
-    });
+    // Serve streaming client static files
+    webhookApp.use(express.static('packages/streaming-server/client'));
 
-    // Error handling
-    streamingApp.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-      console.error('[Streaming] Error:', err);
-      res.status(500).json({
-        error: 'Internal server error',
-        message: err.message,
-      });
-    });
-
-    // Start streaming server
-    const streamingServer = streamingApp.listen(streamingPort, () => {
-      Logger.info(`🎵 Streaming server listening on port ${streamingPort}`);
+    // Start unified server on single port (Railway-compatible)
+    const webhookServer = webhookApp.listen(webhookPort, () => {
+      Logger.info(`🎸 Webhook server listening on port ${webhookPort}`);
+      Logger.info(`📊 Dashboard available at http://localhost:${webhookPort}/dashboard`);
+      Logger.info(`🎵 Streaming available at http://localhost:${webhookPort}/stream/:repoId`);
     });
 
     // ============================================================
@@ -217,7 +188,6 @@ async function main() {
       Logger.info('Shutting down gracefully...');
 
       webhookServer.close();
-      streamingServer.close();
       eventBus.clear();
       musicMapper.dispose();
       streamingService.dispose();
@@ -236,7 +206,7 @@ async function main() {
     Logger.info('║                                                           ║');
     Logger.info(`║   Webhook: http://localhost:${webhookPort}/webhook                ║`);
     Logger.info(`║   Dashboard: http://localhost:${webhookPort}/dashboard            ║`);
-    Logger.info(`║   Streaming: http://localhost:${streamingPort}/stream/:repoId     ║`);
+    Logger.info(`║   Streaming: http://localhost:${webhookPort}/stream/:repoId       ║`);
     Logger.info('║                                                           ║');
     Logger.info('╚═══════════════════════════════════════════════════════════╝');
     Logger.info('');
