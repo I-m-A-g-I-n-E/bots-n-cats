@@ -228,6 +228,14 @@ export class MusicMapper {
           key: pattern.metadata?.key,
         });
       }
+
+      // CRITICAL: Publish music:generated event for StreamingService
+      await this.eventBus.publish('music:generated', {
+        repoId: event.metadata.repository,
+        musicalParams: params,
+        eventType: event.eventType,
+        timestamp: Date.now(),
+      });
     }
   }
 
@@ -346,7 +354,14 @@ export class MusicMapper {
     pattern: Pattern
   ): Promise<void> {
     if (!this.audioService) {
-      return; // Services not yet available
+      // Services not yet available - publish event for StreamingService
+      await this.eventBus.publish('music:generated', {
+        repoId: event.metadata.repository,
+        musicalParams: params,
+        eventType: event.eventType,
+        timestamp: Date.now(),
+      });
+      return;
     }
 
     // Create instrument
